@@ -46,7 +46,12 @@ public class AddressParserService {
         String number = null;
         // if there is only one number
         if (addressPieces.size() == 1) {
-            number = addressPieces.stream().map(a -> a.getText()).findFirst().get();
+            AddressPiece piece = addressPieces.get(0);
+            if (piece.getBegin() > 1 && piece.getEnd() < addressAsRaw.length()) {
+                number = addressAsRaw.substring(piece.getBegin(), addressAsRaw.length());
+            } else {
+                number = piece.getText();
+            }
             address.setNo(number);
             address.setStreet(extractStreet(addressAsRaw, address.getNo()));
         } else {
